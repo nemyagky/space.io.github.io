@@ -3,7 +3,7 @@ var images = {};
 (function createImages() {
 
 	function createImage(src) {
-		var diredtory = "../imgs/";
+		var diredtory = "https://magmiv.github.io/space.io.github.io/imgs/";
 
 		newImage = new Image();
 	  newImage.src = diredtory + src;
