@@ -1,13 +1,15 @@
 var images = {};
 
 (function createImages() {
-alert(123)
+
 	function createImage(src) {
 		var diredtory = "../imgs/";
 
 		newImage = new Image();
 	  newImage.src = diredtory + src;
+		console.log(newImage)
 	  return newImage
+	
 	}
 	images.holes = {}
 	images.holes.blue = createImage("blackhole-blue.png")
