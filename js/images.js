@@ -1,7 +1,7 @@
 var images = {};
 
 (function createImages() {
-
+alert(123)
 	function createImage(src) {
 		var diredtory = "/imgs/";
 
