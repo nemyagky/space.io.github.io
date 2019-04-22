@@ -1,6 +1,8 @@
 var canvas = document.querySelector(".canvas");
 var ctx = canvas.getContext('2d');
 
+alert('Проект не доделан')
+
 
 canvas.width = document.body.clientWidth;
 canvas.height = document.body.clientHeight;
