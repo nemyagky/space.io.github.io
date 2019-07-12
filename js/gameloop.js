@@ -10,7 +10,8 @@ function gameLoop() {
 	setKeyboardSettings()
 	setCursorSettings()
 
-
+	// По большей частности используется для оптимизации. ТК вовсе незачем все действия выполнять 60 раз в секунду - вводит различные счетчики и прочие приемы оптимизации
+	framesPassedFunctions()
 
 	//Рисуем звезды на фоне
 	drawSpace()
@@ -27,18 +28,12 @@ function gameLoop() {
 
 	ctx.restore();
 
-
-
+	
 	// Рисует все статические элементы поверх всего остального
 	drawMiniMap()
-  fps()
+	fps()
 	iterations = 0
-
-
 
 	// Следующий кадр
 	nextGameStep(gameLoop)
-
-	// Переменная, отвечающая за клик по определенному месту в канвасе. Должна обнуляться именно здесь (не факт)
-	cursor.isClicked = false
 }

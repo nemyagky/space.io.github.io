@@ -86,7 +86,13 @@ function drawRect(x, y, w, h, color) {
   ctx.closePath()
 }
 
-
+// Принимает два массива вида [x, y]
+function getDistBetween2dots( dot1, dot2 ) {
+  var a = dot1[0] - dot2[0]
+	var b = dot1[1] - dot2[1]
+  
+  return Math.sqrt( a*a + b*b );
+}
 
 // Объект keyboard содержит активные кнопки клавиатуры
 var keyboardPressed = {}
@@ -107,6 +113,9 @@ function setKeyboardSettings() {
 }
 
 
+function log(text) {
+  console.log(text)
+}
 
 
 
@@ -138,6 +147,41 @@ function setCursorSettings() {
   }
   window.oncontextmenu = function() {
     return false
+  }
+
+}
+
+
+
+var framesPassed = 60
+
+
+// Существует массив shipsFullArray, хранящий в себе все ships. Массив ships хранит в себе корабли рядом с игроков. Называется так для удобства (далее по коду намного удобнее использовать ships, а не какой-нибудь shipsNearPlayer)
+
+var ships = []
+var shoots = []
+
+// По большей частности используется для оптимизации. ТК вовсе незачем все действия выполнять 60 раз в секунду - вводит различные счетчики и прочие приемы оптимизации
+function framesPassedFunctions() {
+
+  framesPassed++
+  if (framesPassed >= 10) {
+    framesPassed = 0
+
+    setItemsNearPlayer()
+    
+  }
+  
+  function setItemsNearPlayer() {
+
+    ships = []
+
+    shipsFullArray.forEach( (ship) => {
+      if (getDistBetween2dots( [mainShip.x, mainShip.y], [ship.x, ship.y] ) <= 7000) {
+        ships.push( ship )
+      }
+    });
+
   }
 
 }

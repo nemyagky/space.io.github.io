@@ -28,18 +28,19 @@ function drawShoots() {
 		})()
 
 
-		/*function wasShootHitShip(i) {
+		function wasShootHitShip(i) {
 			// Перебирает все красные корабли
-			for (var j = 0; j < team.length; j++) {
+			for (var j = 0; j < ships.length; j++) {
 				// Если центр патрона лежит в корабле 
-				if (shoots[i].x + 20 > team[j].x &&
-						shoots[i].x + 5 < team[j].x + team[j].w &&
-						shoots[i].y + 10 > team[j].y &&
-						shoots[i].y + 5 < team[j].y + team[j].h
+				if (shoots[i].x + 20 > ships[j].x &&
+						shoots[i].x + 5 < ships[j].x + ships[j].w &&
+						shoots[i].y + 10 > ships[j].y &&
+						shoots[i].y + 5 < ships[j].y + ships[j].h &&
+						!ships[j].isPlayer
 					 ) 
 				{
-					team[j].x = rand(0, map.w)
-					team[j].y = rand(0, map.h)
+					ships[j].x = rand(0, map.w)
+					ships[j].y = rand(0, map.h)
 
 					// Удаляем патрон
 					delete shoots[i]
@@ -47,41 +48,64 @@ function drawShoots() {
 					break
 				}
 			}
-		}*/
+		}
+
+
+		// Красиво убирает пулю, если она
+		function shootsAlive() {
+
+			shoots[i].timeAlive++
+
+			if ( shoots[i].timeAlive > 60 ) {
+				delete shoots[i]
+				isHolesInShoots = true
+				return 0
+			}
+			return true
+
+		}
 
 
 
 		// Перебираем массив пуль, изменяем координаты и отрисовываем пули. Если пуля столкнулась с кораблем - нанести урон
 		for ( var i = 0; i < shoots.length; i++ ) {
 			iterations++
-			// Увеличивает x и y в зависимости от rotate
-			shoots[i].x += Math.cos(toRad(shoots[i].rotate + 90) ) * shoots[i].speed
-			shoots[i].y += Math.sin(toRad(shoots[i].rotate + 90) ) * shoots[i].speed
 
-			ctx.fillStyle = shoots[i].color
-
-			// Поворачивает и рисут патрон. + 15, +15, + 20, +10 не трогать под страхом смерти. Иначе пули летят не из центра корабля
-			// Смещает центральную точку отрисовки пуль на центральную точку корабля
-			rotate(shoots[i].x, shoots[i].y, shoots[i].rotate + 90)
-			ctx.fillRect(shoots[i].x, shoots[i].y, shoots[i].h, shoots[i].w)
-
-			// Обновляет канвас после поворота
-			ctx.restore()
+			if ( !shootsAlive() ) continue
 
 
+			if ( getDistBetween2dots( [mainShip.x, mainShip.y], [shoots[i].x, shoots[i].y] ) < 100 ) {
+				
+				// Увеличивает x и y в зависимости от rotate
+				shoots[i].x += Math.cos(toRad(shoots[i].rotate + 90) ) * 13
+				shoots[i].y += Math.sin(toRad(shoots[i].rotate + 90) ) * 13
+
+				ctx.fillStyle = shoots[i].color
+
+				// Поворачивает и рисут патрон. + 15, +15, + 20, +10 не трогать под страхом смерти. Иначе пули летят не из центра корабля
+				// Смещает центральную точку отрисовки пуль на центральную точку корабля
+				rotate(shoots[i].x, shoots[i].y, shoots[i].rotate + 90)
+				ctx.fillRect(shoots[i].x, shoots[i].y, shoots[i].h, shoots[i].w)
+
+				// Обновляет канвас после поворота
+				ctx.restore()
 
 
-			// Если пуля вышла за пределы map - удалить ее из массива
-			if (shoots[i].x < 0 || shoots[i].y < 0 || shoots[i].x > map.w || shoots[i].y > map.h)  {
-				delete shoots[i]
-				isHolesInShoots = true
+
+
+				// Если пуля вышла за пределы map - удалить ее из массива
+				if (shoots[i].x < 0 || shoots[i].y < 0 || shoots[i].x > map.w || shoots[i].y > map.h)  {
+					delete shoots[i]
+					isHolesInShoots = true
+				}
+				
+
+				// Если патрон столкнулся с каким-нибудь кораблем - удалить патрон, отнять ХП
+				if (shoots[i]) {
+					wasShootHitShip(i)
+				}
+
 			}
-			
-
-			// Если патрон столкнулся с каким-нибудь кораблем - удалить патрон, отнять ХП
-			/*if (shoots[i]) {		
-				wasShootHitShip(i)
-			}*/
 
 
 		}

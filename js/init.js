@@ -1,7 +1,6 @@
 var canvas = document.querySelector(".canvas");
 var ctx = canvas.getContext('2d');
 
-
 canvas.width = document.body.clientWidth;
 canvas.height = document.body.clientHeight;
 
@@ -44,7 +43,7 @@ var map = {
 	//w: 25000,
 	//h: 14250
 	w: 30000,
-	h: 15000
+	h: 150000
 }
 
 

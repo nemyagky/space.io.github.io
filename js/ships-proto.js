@@ -10,6 +10,8 @@ function Ship(team, type) {
 	if (team == "blue") this.image = images.ships.standart_blue
 	if (team == "red") this.image = images.ships.standart_red
 
+	if (type == "player") this.isPlayer = true
+
 	this.speedUp = 0.3
 	this.speedBrake = 0.04
 	this.speedX = 0
@@ -101,59 +103,52 @@ function Ship(team, type) {
 	this.setTargetForShooting = function() {
 
 
-			this.setRotate = function() {
+		this.setRotate = function() {
 
-				this.rotate = 180 / Math.PI *
-						Math.atan2
-											(
-												this.targetForShooting.y - this.y, 
-												this.targetForShooting.x - this.x
-											)
-			}
-
-
+			this.rotate = 180 / Math.PI *
+					Math.atan2
+								(
+									this.targetForShooting.y - this.y, 
+									this.targetForShooting.x - this.x
+								)
+		}
 
 
-			var nearestShip = {
-				x: this.moveTo.x,
-				y: this.moveTo.y,
-				dist: 99999
-			}
+		var nearestShip = {
+			x: this.moveTo.x,
+			y: this.moveTo.y,
+			dist: 99999
+		}
 
-			// Проходится по всем вражеским кораблям и определяет ближайший
-			for (var i = 0; i < ships.length; i++) {
-				//if (this.team != ships[i].team) {
-					iterations++
+		// Проходится по всем вражеским кораблям и определяет ближайший
+		for (var i = 0; i < ships.length; i++) {
+			//if (this.team != ships[i].team) {
 
-
-						var a = this.x - ships[i].x
-						var b = this.y - ships[i].y
+					var dist = getDistBetween2dots( [this.x, this.y], [ships[i].x, ships[i].y] )
 
 
-						var dist = Math.sqrt( a*a + b*b );
+					if (dist < 300 && dist != 0) {
 
-						if (dist < 300 && dist != 0) {
+						if (dist < nearestShip.dist) {
 
-							if (dist < nearestShip.dist) {
+							nearestShip.x = ships[i].x
+							nearestShip.y = ships[i].y
+							nearestShip.dist = dist
 
-								nearestShip.x = ships[i].x
-								nearestShip.y = ships[i].y
-								nearestShip.dist = dist
-
-							}
 						}
+					}
 
-				}
+		}
 
-				this.targetForShooting = {
-					x: nearestShip.x, 
-					y: nearestShip.y
-				}
+		this.targetForShooting = {
+			x: nearestShip.x, 
+			y: nearestShip.y
+		}
 
-				this.setRotate()
+		this.setRotate()
 
 
-				//}
+		//}
 			
 
 
@@ -214,7 +209,7 @@ function Ship(team, type) {
 
 
 
-var mainShip = new Ship("blue")
+var mainShip = new Ship("blue", "player")
 
 mainShip.behavior = function() {
 
@@ -267,13 +262,15 @@ mainShip.behavior = function() {
 									team: "blue",
 									rotate: mainShip.rotate - 90,
 									speed: 20,
-									color: "#00FFA9"
+									color: "#00FFA9",
+									timeAlive: 0
 								})
 								mainShip.fpsAfterShoot = 0
 
 							}
 				}
-			})();
+			})()
+
 
 
 	}

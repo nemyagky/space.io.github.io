@@ -1,10 +1,9 @@
 var images = {};
 
 (function createImages() {
-	alert('Сайт доделан только на 50%')
 	function createImage(src) {
 	  // Относительный путь почему-то не понимает, записал так. Не хочу разбираться в проблема, так как нет времени
-	  var diredtory = "https://magmiv.github.io/space.io.github.io/imgs/";
+	  var diredtory = "../imgs/";
 
 	  newImage = new Image();
 	  newImage.src = diredtory + src;
