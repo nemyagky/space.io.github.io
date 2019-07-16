@@ -7,5 +7,5 @@
 
 Webpack:
   1) Импорт: import {переменная} from './относительный путь до файла'
-  2) Экспорт: export let shipsFullArray = value. Value может быть любым - хоть функцией.
+  2) Экспорт: export let переменная = value. Value может быть любым - хоть функцией.
     
