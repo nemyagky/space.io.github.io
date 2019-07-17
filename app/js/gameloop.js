@@ -1,12 +1,12 @@
 import './../sass/main.sass';
 
-import {ctx, canvas, iterations} from './init';
+import {ctx, canvas, iterations, miniMap, map} from './init';
 import { setKeyboardSettings, setCursorSettings, framesPassedFunctions, fps, nextGameStep } from './functions';
 import {drawSpace, drawBorder} from './drawStatic'
 import {mainShip} from './ships-proto'
 import {drawShips} from './ships'
 import {drawShoots} from './shoots'
-import {drawMiniMap} from './minimap'
+import {MiniMap} from './minimap'
 
 // При загрузке создаем изображения
 window.addEventListener("load", gameLoop())
@@ -40,7 +40,15 @@ function gameLoop() {
 
 	
 	// Рисует все статические элементы поверх всего остального
-	drawMiniMap();
+	const configMiniMap = {
+		ctx: ctx,
+		x: mainShip.x,
+		y: mainShip.y,
+		w: 4,
+		h: 4,
+		color: '#fff'
+	}
+	const map = new MiniMap(configMiniMap);
 	fps();
 
 	// Следующий кадр
