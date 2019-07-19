@@ -28,18 +28,27 @@ export let shipsInTeam = 10;
 
 export function drawShips() {
 
-	for (let i = 0; i < ships.length; i++) {
+	ships.forEach(ship => {
+		ship.behavior()
 
-		ships[i].behavior()
-
-		rotate(ships[i].x + 40, ships[i].y + 40, ships[i].rotate + 90)
+		rotate(ship.x + 40, ship.y + 40, ship.rotate + 90)
 		//if (ships[i].team == 'red') {
-		ctx.drawImage(ships[i].image, ships[i].x, ships[i].y, 70, 70);
+		ctx.drawImage(ship.image, ship.x, ship.y, ship.w, ship.h);
 		//}
 		ctx.restore()
+	});
+	// for (let i = 0; i < ships.length; i++) {
+
+	// 	ships[i].behavior()
+
+	// 	rotate(ships[i].x + 40, ships[i].y + 40, ships[i].rotate + 90)
+	// 	//if (ships[i].team == 'red') {
+	// 	ctx.drawImage(ships[i].image, ships[i].x, ships[i].y, 700, 70);
+	// 	//}
+	// 	ctx.restore()
 
 
-	}
+	// }
 
 }
 

@@ -8,8 +8,8 @@ import {shoots} from './shoots'
 export function Ship(team, type) {
 
 	// Характеристики всех кораблей при их создании
-	this.w = 20
-	this.h = 20
+	this.w = 70
+	this.h = 70
 
 	this.team = team
 
@@ -197,8 +197,8 @@ export function Ship(team, type) {
 
 
 
-
 export let mainShip = new Ship("blue", "player")
+window.mainShip = mainShip;
 
 mainShip.behavior = function () {
 
