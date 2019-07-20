@@ -1,12 +1,13 @@
 import './../sass/main.sass';
 
-import {ctx, canvas, iterations, miniMap, map} from './init';
-import { setKeyboardSettings, setCursorSettings, framesPassedFunctions, fps, nextGameStep } from './functions';
-import {drawSpace, drawBorder} from './drawStatic'
+import {ctx, canvas} from './init';
+import {map} from './map'
+import {setKeyboardSettings, setCursorSettings, framesPassedFunctions, fps, nextGameStep } from './functions';
 import {mainShip} from './ships-proto'
 import {drawShips} from './ships'
 import {drawShoots} from './shoots'
-import {MiniMap} from './minimap'
+import {miniMap} from './minimap'
+import {stars} from './space'
 
 // При загрузке создаем изображения
 window.addEventListener("load", gameLoop())
@@ -25,30 +26,21 @@ function gameLoop() {
 	framesPassedFunctions();
 
 	//Рисуем звезды на фоне
-	drawSpace();
+	stars.draw();
 
 	// Рисует остальной canvas относительно игрока
 	ctx.save();
 	ctx.translate(-mainShip.x + canvas.width/2, -mainShip.y + canvas.height/2);
 
-  	drawBorder();
+  	map.drawBorder();
 	drawShoots();
 	drawShips();
 	
 
 	ctx.restore();
-
+	miniMap.draw()
 	
 	// Рисует все статические элементы поверх всего остального
-	const configMiniMap = {
-		ctx: ctx,
-		x: mainShip.x,
-		y: mainShip.y,
-		w: 4,
-		h: 4,
-		color: '#fff'
-	}
-	const map = new MiniMap(configMiniMap);
 	fps();
 
 	// Следующий кадр
