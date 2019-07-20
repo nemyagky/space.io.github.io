@@ -1,15 +1,14 @@
-import {images} from './images'
-import {rand, keyboardPressed, ships, getDistBetween2dots, cursor} from './functions'
-import {map, canvas} from './init'
-import {shoots} from './shoots'
-
+import { images } from './images';
+import { rand, keyboardPressed, ships, getDistBetween2dots, cursor } from './functions';
+import { map, canvas,} from './init';
+import { shoots } from './shoots';
 // Создает новый корабль
-// Создает новый корабль
+Ship.prototype.baseHeightShip = 70;
+Ship.prototype.baseWidthShip = 70;
 export function Ship(team, type) {
-
-	// Характеристики всех кораблей при их создании
-	this.w = 70
-	this.h = 70
+	// Характеристики всех кораблей при их создании, значение берется из базовых значений для корабля.
+	this.w = this.baseWidthShip
+	this.h = this.baseHeightShip
 
 	this.team = team
 

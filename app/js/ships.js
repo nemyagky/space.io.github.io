@@ -1,14 +1,27 @@
-import {Ship, mainShip} from './ships-proto';
+import { Ship, mainShip } from './ships-proto';
 import {ships, rotate} from './functions';
 import {ctx} from './init'
 
 export let shipsFullArray = [];
 export let shipsInTeam = 10;
 
+let initWidth = document.body.clientWidth,
+	initHeight = document.body.clientWidth,
+	coefficientSize = (initWidth + initHeight) / Ship.prototype.baseHeightShip;
 
-
+window.addEventListener('resize', () => {
+	//TODO: Доделать, чтобы при изменении разрешение - увеличивались все объекты
+	if (document.body.clientWidth !== initWidth || document.body.clientHeight !== initHeight) {
+		let currentSize = (document.body.clientWidth + document.body.clientHeight)  / coefficientSize;
+		Ship.prototype.baseHeightShip = currentSize;
+		Ship.prototype.baseWidthShip = currentSize;
+		drawShips();
+		console.log(currentSize);
+	}
+	//TODO: Доделать, чтобы при изменении разрешение - увеличивались все объекты
+})
 // Создает корабли
-(function createShips() {
+export function createShips() {
 
 	for (let i = 0; i < shipsInTeam; i++) {
 		shipsFullArray.push(new Ship("blue"));
@@ -23,17 +36,18 @@ export let shipsInTeam = 10;
 	shipsFullArray.push(mainShip);
 	shipsFullArray[shipsFullArray.length - 1].spawn();
 
-})();
+};
 
+createShips();
 
 export function drawShips() {
 
 	ships.forEach(ship => {
-		ship.behavior()
-
+		ship.behavior(Ship.prototype.baseHeightShip)
+		console.log()
 		rotate(ship.x + 40, ship.y + 40, ship.rotate + 90)
 		//if (ships[i].team == 'red') {
-		ctx.drawImage(ship.image, ship.x, ship.y, ship.w, ship.h);
+		ctx.drawImage(ship.image, ship.x, ship.y, Ship.prototype.baseHeightShip, Ship.prototype.baseWidthShip);
 		//}
 		ctx.restore()
 	});

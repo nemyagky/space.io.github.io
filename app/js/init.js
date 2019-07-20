@@ -17,6 +17,7 @@ export let stars = []
 
 window.onresize = function () {
 
+
 	// canvas на всю ширину
 	canvas.width = window.innerWidth;
 	canvas.height = window.innerHeight;
