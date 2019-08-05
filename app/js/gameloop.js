@@ -1,20 +1,19 @@
 import './../sass/main.sass';
-
 import {ctx, canvas} from './init';
 import {map} from './map'
-import {setKeyboardSettings, setCursorSettings, framesPassedFunctions, fps, nextGameStep } from './functions';
-import {mainShip} from './ships-proto'
-import {drawShips} from './ships'
+import {setKeyboardSettings, setCursorSettings, fps, nextGameStep, setTimeSpent } from './functions';
+import {MainShip} from './ships/MainShip'
+import {drawShips, setShipsNearPlayer} from './ships/ships'
 import {drawShoots} from './shoots'
 import {miniMap} from './minimap'
-import {stars} from './space'
+import {stars} from './stars'
 
 // При загрузке создаем изображения
 window.addEventListener("load", gameLoop())
 
 
 function gameLoop() {
-
+	
 	ctx.clearRect(0 , 0, canvas.width, canvas.height);
 
 	// Получаем активные клавиши и информацию о курсоре
@@ -22,15 +21,17 @@ function gameLoop() {
 
 	setCursorSettings();
 
-	// По большей частности используется для оптимизации. ТК вовсе незачем все действия выполнять 60 раз в секунду - вводит различные счетчики и прочие приемы оптимизации
-	framesPassedFunctions();
+	setShipsNearPlayer();
 
 	//Рисуем звезды на фоне
 	stars.draw();
 
 	// Рисует остальной canvas относительно игрока
 	ctx.save();
-	ctx.translate(-mainShip.x + canvas.width/2, -mainShip.y + canvas.height/2);
+
+	MainShip.move()
+	ctx.translate(-MainShip.x + canvas.width/2, -MainShip.y + canvas.height/2);
+	
 
   	map.drawBorder();
 	drawShoots();
@@ -43,6 +44,10 @@ function gameLoop() {
 	// Рисует все статические элементы поверх всего остального
 	fps();
 
+	setTimeSpent()
+
 	// Следующий кадр
 	nextGameStep(gameLoop);
+
+	
 }

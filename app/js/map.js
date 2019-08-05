@@ -1,3 +1,5 @@
+// REFACTORED
+
 import {ctx} from './init';
 
 
@@ -13,7 +15,6 @@ class Map {
       this.w = settings.w;
       this.h = settings.h;
    };
-
 
    drawBorder() {
       ctx.beginPath();

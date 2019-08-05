@@ -11,6 +11,4 @@ window.onresize = function () {
 	canvas.height = window.innerHeight;
 }
 
-
-
 export let iterations = 0;

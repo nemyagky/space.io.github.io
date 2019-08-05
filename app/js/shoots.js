@@ -1,7 +1,7 @@
-import {getDistBetween2dots, toRad, rotate, ships, rand} from './functions'
-import {mainShip} from './ships-proto'
-import {ctx, map} from './init'
-
+import {getDistBetween2dots, toRad, rotate, rand} from './functions';
+import {ctx} from './init';
+import {map} from './map';
+import {ships} from './ships/ships';
 
 // Рисует выстрелы
 
@@ -75,8 +75,6 @@ export function drawShoots() {
 	for (let i = 0; i < shoots.length; i++) {
 
 
-		if (getDistBetween2dots([mainShip.x, mainShip.y], [shoots[i].x, shoots[i].y]) < 1000) {
-
 			// Увеличивает x и y в зависимости от rotate
 			shoots[i].x += Math.cos(toRad(shoots[i].rotate + 90)) * 13
 			shoots[i].y += Math.sin(toRad(shoots[i].rotate + 90)) * 13
@@ -111,9 +109,6 @@ export function drawShoots() {
 			if (shoots[i]) {
 				wasShootHitShip(i)
 			}
-
-		}
-
 
 	}
 

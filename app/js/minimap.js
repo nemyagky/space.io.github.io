@@ -1,6 +1,8 @@
+// REFACTORED
+
 import {ctx, canvas} from './init'
 import {map} from './map'
-import {mainShip} from './ships-proto'
+import {MainShip} from './ships/MainShip'
 
 
 const miniMapSettings = {
@@ -25,12 +27,13 @@ class MiniMap {
 		})
 	};
 
-	draw = () => {
+	draw() {
 		this.drawBorder();
-		this.drawObject( mainShip.x, mainShip.y, 4, 4, "#FFFFFF");
+		this.drawObject( MainShip.x, MainShip.y, 4, 4, "#FFFFFF");
 	};
 
-	setSize = (width) => {
+	// При изменении размеров экрана
+	setSize(width) {
 
 		width = width/3.85;
 
@@ -45,7 +48,7 @@ class MiniMap {
 			
 	};
 
-	drawBorder = () => {
+	drawBorder() {
 		ctx.beginPath();
 		ctx.strokeStyle = "#fff";
 		ctx.rect(1, (canvas.height - this.height - 2), this.width + 5, this.height);
@@ -54,7 +57,7 @@ class MiniMap {
 	};
 
 	// Переводит настоящие координаты в координаты на миникарте
-	drawObject = ( objX, objY, objW, objH, obgColor ) => {
+	drawObject( objX, objY, objW, objH, obgColor ) {
 		this.setColor( obgColor );
 
 		ctx.fillRect(
@@ -66,13 +69,12 @@ class MiniMap {
 		)
 	};
 
-	setColor = (newColor) => {
-
+	// Используется для оптимизации, чтобы не менять цвет у ctx постоянно
+	setColor(newColor) {
 		if (this.color != newColor) {
 			ctx.fillColor = newColor;
 			this.color = newColor;
 		}
-
 	};
 
 };
@@ -130,6 +132,6 @@ export const miniMap = new MiniMap(miniMapSettings);
 // 	ctx.closePath();
 // 	// Рисуем главный корабль
 // 	ctx.fillStyle = "#fff"
-// 	drawOnMiniMap(mainShip.x, mainShip.y, 4, 4)
+// 	drawOnMiniMap(MainShip.x, MainShip.y, 4, 4)
 
 // }

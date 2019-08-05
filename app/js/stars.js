@@ -1,4 +1,6 @@
-import {ctx, canvas, iterations} from './init'
+// REFACTORED
+
+import {ctx, canvas} from './init'
 import {rand} from './functions'
 
 
@@ -12,26 +14,17 @@ class Stars {
       })
    };
 
-
-   updateStarsCount = () => {
-      if ( canvas.width > 1000 ) 
-         this.starsCount = canvas.width / 2;
-      else 
-         this.starsCount = canvas.width;
-   };
-
-
-   createStars = () => {
+   createStars() {
 
       this.updateStarsCount();
 
       this.stars = [];
 
-      for (let i = 0; i < this.starsCount; i++) {
+      for (let i = 0; i < this._starsCount; i++) {
          this.stars.push({
             // Диаметр
             d: rand(1, 9),
-            // Скорость (делим на 100, так как они должны двигаться медленно)
+            // Скорость делим на 100, так как они должны двигаться медленно
             speedX: rand(-3, 3) / 100,
             speedY: rand(-3, 3) / 100,
             x: rand(1, canvas.width),
@@ -40,14 +33,22 @@ class Stars {
       }
    };
 
+   updateStarsCount() {
+      if ( canvas.width > 1000 ) 
+         this._starsCount = canvas.width / 2;
+      else 
+         this._starsCount = canvas.width;
+   };
 
-   draw = () => {
 
-      ctx.fillStyle = "#ffffff";
+   draw() {
 
       let stars = this.stars;
 
-      for (let i = 0; i < this.starsCount; i++) {
+      ctx.fillStyle = "#ffffff";
+
+      for (let i = 0; i < this._starsCount; i++) {
+         // Меняем положение звезды
          stars[i].x += stars[i].speedX;
          stars[i].y += stars[i].speedY;
    

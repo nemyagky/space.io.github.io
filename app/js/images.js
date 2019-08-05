@@ -1,3 +1,5 @@
+// REFACTORED
+
 const diredtory = "/app/imgs/";
 
 

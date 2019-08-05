@@ -1,12 +1,13 @@
-import {mainShip} from './ships-proto'
+import {MainShip} from './ships/MainShip'
 import {ctx, iterations} from './init';
 import {shoots} from './shoots';
-import {shipsFullArray} from './ships'
 
+
+// ФПС в левом верхнем углу
 export function fps() {
   ctx.fillStyle = "#fff";
   ctx.font = "20pt Arial";
-  ctx.fillText("Итераций: " + iterations, 10, 130)
+  ctx.fillText("Итераций: " + iterations, 10, 130);
   ctx.fillText("Выстрелов: " + shoots.length, 10, 30);
   ctx.fillText("FPS: " + countFPS(), 10, 80);
 };
@@ -27,12 +28,11 @@ let countFPS = function () {
     lastLoop = currentLoop;
     return fps;
   };
-}()
+}();
 
 
 
-
-
+// Следующий кадр
 export let nextGameStep = (function () {
   return requestAnimationFrame ||
     mozRequestAnimationFrame ||
@@ -40,89 +40,75 @@ export let nextGameStep = (function () {
     oRequestAnimationFrame ||
     msRequestAnimationFrame ||
     function (callback) {
-      setTimeout(callback, 1000 / 60)
+      setTimeout(callback, 1000 / 60);
     }
 })();
 
 
 
-
-
-
-
-
+// Рандомайзер
 export function rand(min, max) {
   let rand = min + Math.random() * (max + 1 - min);
   rand = Math.floor(rand);
   return rand;
-}
+};
 
+
+
+// Перевод градусов в радианы
 export function toRad(a) {
-  return a * Math.PI / 180
-}
+  return a * Math.PI / 180;
+};
 
 
 
-// Поворачивает объект. Принимает в себя центр объекта и угол поворота
+// Поворачивает объект во время отрисвоки на canvas. Принимает в себя центр объекта и угол поворота
 export function rotate(dx, dy, a) {
-  ctx.save()
-  ctx.translate(dx, dy)
-  ctx.rotate((Math.PI / 180) * a)
-  ctx.translate(-dx, -dy)
-}
+  ctx.save();
+  ctx.translate(dx, dy);
+  ctx.rotate((Math.PI / 180) * a);
+  ctx.translate(-dx, -dy);
+};
 
 
 
+// Пересекаются ли два объекта
 function isIntersect(centerX, centerY, blockXTop, blockYLeft, dist) {
   // Если (условно) курсор > верх блока, но меньше, чем его низ - условие верно. Низ это верх блока + dist 
   return centerX > blockXTop &&
     centerX < blockXTop + dist &&
     centerY > blockYLeft &&
     centerY < blockYLeft + dist
-}
+};
 
-function drawRect(x, y, w, h, color) {
-  ctx.beginPath()
-  ctx.strokeStyle = color
-  // Отступ слева - 1, чтобы была видна рамка
-  // Высота экрана - высота миникарты - 1 (чтобы была видна рамка)
-  // Ширина, высота
-  ctx.rect(x, y, w, h)
-  ctx.stroke()
-  ctx.closePath()
-}
+
 
 // Принимает два массива вида [x, y]
 export function getDistBetween2dots(dot1, dot2) {
-  let a = dot1[0] - dot2[0]
-  let b = dot1[1] - dot2[1]
+  let a = dot1[0] - dot2[0];
+  let b = dot1[1] - dot2[1];
 
   return Math.sqrt(a * a + b * b);
-}
+};
+
+
 
 // Объект keyboard содержит активные кнопки клавиатуры
-export let keyboardPressed = {}
-
+export let keyboardPressed = {};
 export function setKeyboardSettings() {
   window.onkeydown = function (e) {
-    if (e.keyCode == 87) keyboardPressed.w = true
-    if (e.keyCode == 65) keyboardPressed.a = true
-    if (e.keyCode == 68) keyboardPressed.s = true
-    if (e.keyCode == 83) keyboardPressed.d = true
-  }
+    if (e.keyCode == 87) keyboardPressed.w = true;
+    if (e.keyCode == 65) keyboardPressed.a = true;
+    if (e.keyCode == 68) keyboardPressed.s = true;
+    if (e.keyCode == 83) keyboardPressed.d = true;
+  };
   window.onkeyup = function (e) {
-    if (e.keyCode == 87) keyboardPressed.w = false
-    if (e.keyCode == 65) keyboardPressed.a = false
-    if (e.keyCode == 68) keyboardPressed.s = false
-    if (e.keyCode == 83) keyboardPressed.d = false
-  }
-}
-
-
-function log(text) {
-  console.log(text)
-}
-
+    if (e.keyCode == 87) keyboardPressed.w = false;
+    if (e.keyCode == 65) keyboardPressed.a = false;
+    if (e.keyCode == 68) keyboardPressed.s = false;
+    if (e.keyCode == 83) keyboardPressed.d = false;
+  };
+};
 
 
 
@@ -133,65 +119,45 @@ export let cursor = {
   isPressed: false,
   isClicked: false,
   e: ''
-}
+};
 
+
+
+// Можно ли делать выстрелы главному игроку
 export let fpsAfterShoot = 0;
 export function setCursorSettings() {
 
-
   window.onmousemove = function (e) {
-    cursor.x = e.clientX
-    cursor.y = e.clientY
-    cursor.e = e.target
-  }
+    cursor.x = e.clientX;
+    cursor.y = e.clientY;
+    cursor.e = e.target;
+  };
   window.onmousedown = function () {
-    cursor.isPressed = true
-  }
+    cursor.isPressed = true;
+  };
   window.onmouseup = function () {
-    cursor.isPressed = false
+    cursor.isPressed = false;
 
-    fpsAfterShoot = mainShip.fireSpeed
-  }
+    fpsAfterShoot = MainShip.fireSpeed;
+  };
   window.onclick = function () {
-    cursor.isClicked = true
-  }
+    cursor.isClicked = true;
+  };
   window.oncontextmenu = function () {
-    return false
-  }
+    return false;
+  };
 
+};
+
+
+let lastTimeSpent = Date.now()
+
+// Используется в gameloop.js
+export function setTimeSpent() {
+  lastTimeSpent = Date.now()
 }
 
-
-
-let framesPassed = 60
-
-
-// Существует массив shipsFullArray, хранящий в себе все ships. Массив ships хранит в себе корабли рядом с игроков. Называется так для удобства (далее по коду намного удобнее использовать ships, а не какой-нибудь shipsNearPlayer)
-
-export let ships = []
-
-// По большей частности используется для оптимизации. ТК вовсе незачем все действия выполнять 60 раз в секунду - вводит различные счетчики и прочие приемы оптимизации
-export function framesPassedFunctions() {
-
-  framesPassed++
-  if (framesPassed >= 10) {
-    framesPassed = 0
-
-    setItemsNearPlayer()
-
-  }
-
-  function setItemsNearPlayer() {
-
-    ships = []
-
-
-    shipsFullArray.forEach((ship) => {
-      if (getDistBetween2dots([mainShip.x, mainShip.y], [ship.x, ship.y]) <= 3000) {
-        ships.push(ship)
-      }
-    });
-
-  }
-
+export function setSpeed(speed) {
+  let deltaTime = (Date.now() - lastTimeSpent)/1000;
+  return speed * deltaTime;
 }
