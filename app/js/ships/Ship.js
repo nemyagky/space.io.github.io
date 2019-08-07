@@ -2,6 +2,7 @@ import {Map} from './../Map';
 import {rand, getDistBetween2dots, setSpeed} from './../functions';
 import {images} from './../images';
 
+
 export const defaultShip = {
 	w: 20,
 	h: 20,
@@ -13,6 +14,7 @@ export const defaultShip = {
 	rotate: 0,
 	fireSpeed: 15
 };
+
 
 export class Ship {
 
@@ -34,6 +36,7 @@ export class Ship {
 		this.fireSpeed = shipSettings.fireSpeed;
 		this.fpsAfterShoot = this.fireSpeed;
 	}
+
 
 	// obj - ship cords
 	spawn(obj) {
@@ -60,6 +63,7 @@ export class Ship {
 		this.speedX = rand(0, 700);
 		this.speedY = rand(-700, 700);
 	};
+
 
 	// Physics of moving
 	moving() {
@@ -119,12 +123,12 @@ export class Ship {
 				that.speedY = 0;
 			}
 		})();
-
 	};
+
 
 	// Detects the nearest enemy and rotate in it's direction
 	setTargetForShooting() {
-		
+
 		// Rotate ship to targetForShooting
 		function setRotate() {
 			this.rotate = 180 / Math.PI *
@@ -162,9 +166,11 @@ export class Ship {
 		setRotate();
 	};
 
+
 	setTeammaterForAttack() {
 	};
 
+	
 	// This function must contain all actions for ship. Calling in Ships.draw()
 	behavior() {
 		this.moving();

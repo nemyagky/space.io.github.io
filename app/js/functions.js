@@ -152,7 +152,7 @@ export let cursor = {
 
 let lastTimeSpent = Date.now();
 
-// Usning in gameloop.js
+// Using in gameloop.js
 export function setTimeSpent() {
   lastTimeSpent = Date.now();
 }

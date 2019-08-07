@@ -6,6 +6,7 @@ function createImage(src) {
 	return image;
 }
 
+
 export const images = {
 	ships: {
 		standart_blue: createImage("standart_blue.svg"),

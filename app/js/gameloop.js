@@ -39,7 +39,6 @@ function gameLoop() {
 	ctx.restore();
 
 
-
 	// Drawing canvas relative to the creen
 	MiniMap.draw();
 	fps();

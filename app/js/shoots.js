@@ -6,12 +6,15 @@ import {Map} from './Map';
 
 export let shoots = [];
 
+
 export let Shoots = new class Shoots {
+
 
 	constructor() {
 		// Are there holes in the shoots array (they are creatiпg when the shoot left the canvas / crashed into a ship)
 		this.isHoles = false;
 	};
+
 
 	draw() {
 		this.removeHoles();
@@ -54,6 +57,7 @@ export let Shoots = new class Shoots {
 
 	};
 
+
 	// After a bullet collides with something, the bullet will be deleted and a hole will appear. Remove the holes
 	removeHoles() {
 		if (this.isHoles) {
@@ -67,6 +71,7 @@ export let Shoots = new class Shoots {
 		}
 	};
 
+
 	// Bullets should disappear after some time
 	isShootAlive(i) {
 		shoots[i].timeAlive++;
@@ -78,6 +83,7 @@ export let Shoots = new class Shoots {
 		}
 		return true;
 	};
+
 
 	wasShootHitShip(shoot, i) {
 		// Sorting all the ships
@@ -99,5 +105,6 @@ export let Shoots = new class Shoots {
 			}
 		}
 	};
+
 
 };

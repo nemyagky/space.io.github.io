@@ -13,6 +13,7 @@ export let Stars = new class Stars {
       })
    };
 
+
    // Creating stars depending on window width
    createStars() {
       this.updateStarsCount();
@@ -32,12 +33,14 @@ export let Stars = new class Stars {
       }
    };
 
+
    updateStarsCount() {
       if ( canvas.width > 1000 ) 
          this.starsCount = canvas.width / 2;
       else 
          this.starsCount = canvas.width;
    };
+
 
    // Drawing and moving the stars
    draw() {
@@ -60,8 +63,7 @@ export let Stars = new class Stars {
          if (stars[i].y > canvas.height + 5) stars[i].y = 0 - 5;
    
          // Drawing stars by small squares
-         ctx.fillRect(stars[i].x, stars[i].y, stars[i].d / 7, stars[i].d / 7);
-         
+         ctx.fillRect(stars[i].x, stars[i].y, stars[i].d / 7, stars[i].d / 7); 
       };
 
    };

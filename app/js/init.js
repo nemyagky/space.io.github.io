@@ -13,4 +13,6 @@ window.addEventListener('resize', () => {
 	stretchCanvas();
 });
 
+
+
 export let iterations = 0;

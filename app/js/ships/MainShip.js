@@ -10,9 +10,9 @@ export let MainShip = new class MainShip extends Ship {
 		super(defaultShip, 'blue');
 	};
 
+
 	// This function must contain all actions for ship. Calling in Ships.draw()
 	behavior() {
-	
 		let that = this;
 
 		that.moving();
@@ -59,6 +59,6 @@ export let MainShip = new class MainShip extends Ship {
 				};
 			};
 		})();
-
 	};
+
 }

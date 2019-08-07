@@ -25,14 +25,15 @@ export const MiniMap = new class MiniMap {
 		})
 	};
 
+
 	draw() {
 		this.drawBorder();
 		this.drawObject( MainShip.x, MainShip.y, 4, 4, "#FFFFFF");
 	};
 
+
 	// During resizing the screen
 	setSize(width) {
-
 		width = width/3.85;
 
 		if (width > this.maxW)
@@ -43,8 +44,8 @@ export const MiniMap = new class MiniMap {
 			this.width = width;
 
 		this.height = this.width/this.heightCoef;
-			
 	};
+
 
 	// Draw minimap border
 	drawBorder() {
@@ -54,6 +55,7 @@ export const MiniMap = new class MiniMap {
 		ctx.stroke();
 		ctx.closePath();
 	};
+
 
 	// Translate real coordinates to coordinates on the minimap
 	drawObject( objX, objY, objW, objH, obgColor ) {

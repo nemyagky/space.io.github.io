@@ -4,11 +4,12 @@ import {rotate, getDistBetween2dots} from '../functions';
 import {ctx} from '../init';
 
 
-// there are 2 ships array: 
+// There are 2 ships array: 
 // 1) ships - ships near to the player. It's updating every second. It's using for optimisation
 // 2) shipsFullArray - every ships at the map. Every second some ships are cloning from there (see setShipsNearPlayer()).
 export let ships = [];
 let shipsFullArray = [];
+
 
 export let Ships = new class Ships {
 
@@ -19,9 +20,9 @@ export let Ships = new class Ships {
 		this.create();
 	};
 
+
 	// Create ships on pageload
 	create() {
-
 		for (let i = 0; i < this.shipsInTeam; i++) {
 			shipsFullArray.push(new ShipBot("blue"));
 			shipsFullArray[i].spawn();
@@ -36,6 +37,7 @@ export let Ships = new class Ships {
 		shipsFullArray[shipsFullArray.length - 1].spawn();
 	};
 
+
 	// Drawing and perform behavior of every ship
 	draw() {
 		for (let i = ships.length-1; i < ships.length; i++) {
@@ -49,6 +51,7 @@ export let Ships = new class Ships {
 			ctx.restore();
 		}
 	};
+
 
 	setShipsNearPlayer() {
 		this.framesPassed++;
@@ -65,7 +68,6 @@ export let Ships = new class Ships {
 				};
 			});
 		};
-
 	};
 
 };
