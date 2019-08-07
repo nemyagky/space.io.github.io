@@ -40,7 +40,7 @@ export let Ships = new class Ships {
 
 	// Drawing and perform behavior of every ship
 	draw() {
-		for (let i = ships.length-1; i < ships.length; i++) {
+		for (let i = 0; i < ships.length; i++) {
 			
 			// Moves, turns, makes shoot, etc.
 			ships[i].behavior();
