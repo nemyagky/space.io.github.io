@@ -1,8 +1,7 @@
-// REFACTORED
-
-import {ctx, canvas} from './init'
-import {map} from './map'
-import {MainShip} from './ships/MainShip'
+import {ctx, canvas} from './init';
+import {setColor} from './functions';
+import {Map} from './Map';
+import {MainShip} from './ships/MainShip';
 
 
 const miniMapSettings = {
@@ -11,16 +10,15 @@ const miniMapSettings = {
 	heightCoef: 1.8
 };
 
-class MiniMap {
+export const MiniMap = new class MiniMap {
 	
-	constructor( {maxW, minW, heightCoef} ) {
-		this.maxW = maxW;
-		this.minW = minW;
-		this.heightCoef = heightCoef;
+	constructor() {
+		this.maxW = miniMapSettings.maxW;
+		this.minW = miniMapSettings.minW;
+		this.heightCoef = miniMapSettings.heightCoef;
 		this.color = "#FFFFFF";
 
 		this.setSize( window.innerWidth );
-
 
 		window.addEventListener('resize', () => {
 			this.setSize( window.innerWidth );
@@ -32,7 +30,7 @@ class MiniMap {
 		this.drawObject( MainShip.x, MainShip.y, 4, 4, "#FFFFFF");
 	};
 
-	// При изменении размеров экрана
+	// During resizing the screen
 	setSize(width) {
 
 		width = width/3.85;
@@ -48,6 +46,7 @@ class MiniMap {
 			
 	};
 
+	// Draw minimap border
 	drawBorder() {
 		ctx.beginPath();
 		ctx.strokeStyle = "#fff";
@@ -56,82 +55,18 @@ class MiniMap {
 		ctx.closePath();
 	};
 
-	// Переводит настоящие координаты в координаты на миникарте
+	// Translate real coordinates to coordinates on the minimap
 	drawObject( objX, objY, objW, objH, obgColor ) {
-		this.setColor( obgColor );
+		setColor( obgColor );
 
 		ctx.fillRect(
-			// Позиция по x - (получаем % координаты на всей карте) *  miniMap.w, чтобы перевести в размеры миникарты
-			( (objX / map.w) * this.width ),
-			// Позиция по Y - (canvas.height - miniMap.h - 2) - верхняя точка minimap + (получаем % координаты на всей карте) *  miniMap.h
-			((canvas.height - this.height) + (objY / map.h) * this.height) - 3.5,
+			// X position - (getting % coordinates on the real map) *  miniMap.w, to translate in minimap cords
+			( (objX / Map.w) * this.width ),
+			// Y position - (top minimap border) + ((getting % coordinates on the real map) *  miniMap.h)
+			// 3.5 because drawing object has height
+			((canvas.height - this.height) + (objY / Map.h) * this.height) - 3.5,
 			objW, objH	
-		)
-	};
-
-	// Используется для оптимизации, чтобы не менять цвет у ctx постоянно
-	setColor(newColor) {
-		if (this.color != newColor) {
-			ctx.fillColor = newColor;
-			this.color = newColor;
-		}
+		);
 	};
 
 };
-
-export const miniMap = new MiniMap(miniMapSettings);
-
-
-
-/* 	init = () => {
-		this.visualSetting();	
-		this.drawMainStarship();
-	} */
-
-/* 	drawOnMinimap = ( obj ) => {
-
-		ctx.fillStyle = color
-
-		// Позиция по x - (получаем % координаты на всей карте) *  miniMap.w, чтобы перевести в размеры миникарты
-		// Позиция по Y - (canvas.height - miniMap.h - 2) - верхняя точка minimap + (получаем % координаты на всей карте) *  miniMap.h
-		ctx.fillRect(
-			((obj.x / map.w) * this.width),
-			((canvas.height - this.height) + (this.y / map.h) * miniMap.h) - 3.5,
-			obj.w, obj.h
-		)
-	} */
-
-
-
-
-/* 	drawMainStarship = () => {
-		this.ctx.fillStyle = "#fff"
-		this.drawMiniMap();
-	} */
-
-// export function drawMiniMap() {
-// 	// Используется для перевода реальных координат в координаты на миникарте
-// 	function drawOnMiniMap(x, y, w, h, color) {
-// 		ctx.fillStyle = color
-// 		// Позиция по x - (получаем % координаты на всей карте) *  miniMap.w, чтобы перевести в размеры миникарты
-// 		// Позиция по Y - (canvas.height - miniMap.h - 2) - верхняя точка minimap + (получаем % координаты на всей карте) *  miniMap.h
-// 		ctx.fillRect(
-// 			((x / map.w) * miniMap.w),
-// 			((canvas.height - miniMap.h) + (y / map.h) * miniMap.h) - 3.5,
-// 			w, h
-// 		)
-// 	};
-// 	// Рисуем рамку у карты
-// 	ctx.beginPath()
-// 	ctx.strokeStyle = "#fff"
-// 	// Отступ слева - 1, чтобы была видна рамка
-// 	// Высота экрана - высота миникарты - 1 (чтобы была видна рамка)
-// 	// Ширина, высота
-// 	ctx.rect(1, (canvas.height - miniMap.h - 2), miniMap.w + 5, miniMap.h)
-// 	ctx.stroke()
-// 	ctx.closePath();
-// 	// Рисуем главный корабль
-// 	ctx.fillStyle = "#fff"
-// 	drawOnMiniMap(MainShip.x, MainShip.y, 4, 4)
-
-// }

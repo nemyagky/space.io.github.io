@@ -1,59 +1,46 @@
 import {Ship, defaultShip} from './Ship';
 import {setSpeed, keyboardPressed, cursor} from '../functions';
-import {shoots} from '../shoots';
+import {shoots} from '../Shoots';
 import {canvas} from '../init';
 
 
-
-export let MainShip = new class MsainShip extends Ship {
+export let MainShip = new class MainShip extends Ship {
 
 	constructor() {
-		super(defaultShip, 'blue')
-	}
+		super(defaultShip, 'blue');
+	};
 
-	move() {
-		this.x += setSpeed(this.speedX)
-		this.y += setSpeed(this.speedY)
-	}
-
+	// This function must contain all actions for ship. Calling in Ships.draw()
 	behavior() {
 	
 		let that = this;
 
 		that.moving();
-		// Разгоняет корабль, если нажата клавиша
+
+		// Accelerate a ship if a key is pressed
 		(function changeSpeed() {
-			if (keyboardPressed.w) that.speedY -= setSpeed(that.speedUp)
-			if (keyboardPressed.a) that.speedX -= setSpeed(that.speedUp)
-			if (keyboardPressed.s) that.speedX += setSpeed(that.speedUp)
-			if (keyboardPressed.d) that.speedY += setSpeed(that.speedUp)
+			if (keyboardPressed.w) that.speedY -= setSpeed(that.speedUp);
+			if (keyboardPressed.a) that.speedX -= setSpeed(that.speedUp);
+			if (keyboardPressed.s) that.speedX += setSpeed(that.speedUp);
+			if (keyboardPressed.d) that.speedY += setSpeed(that.speedUp);
 		})();
 	
-	
+		// Turns the ship in the direction of the cursor
 		(function rotate() {
-			// Поворачивает корабль
-	
-			// Находим угол А между центром корабля (точкой a) и координатой мышки (точкой b)
-			// Math.atan2(a - координаты точки a(курсора), b - координаты центра корабля)
-			//     .b
-			//    ..
-			//   . . A
-			// a....
-			//   B
-	
+			// Find the angle between the center of the ship and the coordinate of the mouse
+			// canvas.height / 2 - mainShip cords relative to window
 			that.rotate = 180 / Math.PI * Math.atan2(cursor.y - (canvas.height / 2),
 				cursor.x - (canvas.width / 2)
-			)
+			);
 		})();
 
 		
 		(function makeShoot() {
-			// fpsAfterShoot - регулятор частоты выстрелов. Каждый кадр он прибавляется и при достижении определенной отметки он позволяет сделать новый выстрел
-			// Затем он обнулятеся
-			that.fpsAfterShoot++
+			// fpsAfterShoot - shot frequency regulator. Each frame is incrementing and when it is enough, it allows you to make a new shot
+			that.fpsAfterShoot++;
 
 			if (cursor.isPressed) {
-				// Если прошло достаточно времени с прошлого выстрела
+				// If enough time has passed since the last shot
 				if (that.fpsAfterShoot > that.fireSpeed) {
 
 					shoots.push({
@@ -66,12 +53,12 @@ export let MainShip = new class MsainShip extends Ship {
 						speed: 20,
 						color: "#00FFA9",
 						timeAlive: 0
-					})
-					that.fpsAfterShoot = 0
+					});
+					that.fpsAfterShoot = 0;
 
-				}
-			}
+				};
+			};
 		})();
 
-	}
+	};
 }

@@ -1,5 +1,3 @@
-// REFACTORED
-
 import {ctx} from './init';
 
 
@@ -9,11 +7,11 @@ const mapSettings = {
 };
 
 
-class Map {
+export const Map = new class Map {
 
-   constructor(settings) {
-      this.w = settings.w;
-      this.h = settings.h;
+   constructor() {
+      this.w = mapSettings.w;
+      this.h = mapSettings.h;
    };
 
    drawBorder() {
@@ -22,8 +20,6 @@ class Map {
       ctx.rect(0, 0, this.w, this.h);
       ctx.stroke();
       ctx.closePath();
-   }
+   };
 
-}
-
-export const map = new Map(mapSettings);
+};

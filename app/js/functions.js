@@ -1,9 +1,22 @@
-import {MainShip} from './ships/MainShip'
 import {ctx, iterations} from './init';
-import {shoots} from './shoots';
+import {shoots} from './Shoots';
 
 
-// ФПС в левом верхнем углу
+// Next frame
+export let nextGameStep = (function () {
+  return requestAnimationFrame ||
+    mozRequestAnimationFrame ||
+    webkitRequestAnimationFrame ||
+    oRequestAnimationFrame ||
+    msRequestAnimationFrame ||
+    function (callback) {
+      setTimeout(callback, 1000 / 60);
+    }
+})();
+
+
+
+// FPS in the top left corner
 export function fps() {
   ctx.fillStyle = "#fff";
   ctx.font = "20pt Arial";
@@ -32,21 +45,6 @@ let countFPS = function () {
 
 
 
-// Следующий кадр
-export let nextGameStep = (function () {
-  return requestAnimationFrame ||
-    mozRequestAnimationFrame ||
-    webkitRequestAnimationFrame ||
-    oRequestAnimationFrame ||
-    msRequestAnimationFrame ||
-    function (callback) {
-      setTimeout(callback, 1000 / 60);
-    }
-})();
-
-
-
-// Рандомайзер
 export function rand(min, max) {
   let rand = min + Math.random() * (max + 1 - min);
   rand = Math.floor(rand);
@@ -55,14 +53,15 @@ export function rand(min, max) {
 
 
 
-// Перевод градусов в радианы
+// a - angle in degrees
 export function toRad(a) {
   return a * Math.PI / 180;
 };
 
 
 
-// Поворачивает объект во время отрисвоки на canvas. Принимает в себя центр объекта и угол поворота
+// Rotate an object while rendering to canvas. It takes the center of the object and the angle of rotation
+// After calling thia func, we need to draw an object and use ctx.restore()
 export function rotate(dx, dy, a) {
   ctx.save();
   ctx.translate(dx, dy);
@@ -72,9 +71,9 @@ export function rotate(dx, dy, a) {
 
 
 
-// Пересекаются ли два объекта
+// Right now it accepts one dot and one block and check is's collision
+// dist - block's width
 function isIntersect(centerX, centerY, blockXTop, blockYLeft, dist) {
-  // Если (условно) курсор > верх блока, но меньше, чем его низ - условие верно. Низ это верх блока + dist 
   return centerX > blockXTop &&
     centerX < blockXTop + dist &&
     centerY > blockYLeft &&
@@ -83,7 +82,18 @@ function isIntersect(centerX, centerY, blockXTop, blockYLeft, dist) {
 
 
 
-// Принимает два массива вида [x, y]
+// Used for optimization, because changing ctx color - costly operation (if you are interesting - it takes 30% more time)
+let ctxColor = "#FFFFFF";
+export function setColor(newColor) {
+	if (ctxColor != newColor) {
+		ctx.fillStyle = newColor;
+		ctxColor = newColor;
+	};
+};
+
+
+
+// Accepts two arrays of the form [x, y]
 export function getDistBetween2dots(dot1, dot2) {
   let a = dot1[0] - dot2[0];
   let b = dot1[1] - dot2[1];
@@ -93,9 +103,10 @@ export function getDistBetween2dots(dot1, dot2) {
 
 
 
-// Объект keyboard содержит активные кнопки клавиатуры
+// The keyboardPressed object contains active keyboard buttons
 export let keyboardPressed = {};
-export function setKeyboardSettings() {
+
+(function setKeyboardSettings() {
   window.onkeydown = function (e) {
     if (e.keyCode == 87) keyboardPressed.w = true;
     if (e.keyCode == 65) keyboardPressed.a = true;
@@ -108,53 +119,42 @@ export function setKeyboardSettings() {
     if (e.keyCode == 68) keyboardPressed.s = false;
     if (e.keyCode == 83) keyboardPressed.d = false;
   };
-};
+})();
 
 
 
-// Положение курсора, нажат ли он
 export let cursor = {
   x: 0,
   y: 0,
-  isPressed: false,
-  isClicked: false,
-  e: ''
+  isPressed: false
 };
 
+(function setCursorSettings() {
 
-
-// Можно ли делать выстрелы главному игроку
-export let fpsAfterShoot = 0;
-export function setCursorSettings() {
-
-  window.onmousemove = function (e) {
+  window.addEventListener("mousemove", (e) => {
     cursor.x = e.clientX;
     cursor.y = e.clientY;
     cursor.e = e.target;
-  };
-  window.onmousedown = function () {
+  });
+  window.addEventListener("mousedown", () => {
     cursor.isPressed = true;
-  };
-  window.onmouseup = function () {
+  });
+  window.addEventListener("mouseup", () => {
     cursor.isPressed = false;
-
-    fpsAfterShoot = MainShip.fireSpeed;
-  };
-  window.onclick = function () {
-    cursor.isClicked = true;
-  };
-  window.oncontextmenu = function () {
+  });
+  window.addEventListener("contextmenu", () => {
     return false;
-  };
+  });
 
-};
+})();
 
 
-let lastTimeSpent = Date.now()
 
-// Используется в gameloop.js
+let lastTimeSpent = Date.now();
+
+// Usning in gameloop.js
 export function setTimeSpent() {
-  lastTimeSpent = Date.now()
+  lastTimeSpent = Date.now();
 }
 
 export function setSpeed(speed) {

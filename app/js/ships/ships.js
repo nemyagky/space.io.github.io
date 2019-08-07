@@ -1,70 +1,71 @@
 import {ShipBot} from './ShipBot';
 import {MainShip} from './MainShip';
-import {rotate, getDistBetween2dots} from './../functions';
-import {ctx} from './../init';
+import {rotate, getDistBetween2dots} from '../functions';
+import {ctx} from '../init';
 
 
-// Корабли рядом с игроком
+// there are 2 ships array: 
+// 1) ships - ships near to the player. It's updating every second. It's using for optimisation
+// 2) shipsFullArray - every ships at the map. Every second some ships are cloning from there (see setShipsNearPlayer()).
 export let ships = [];
+let shipsFullArray = [];
 
-export let shipsFullArray = [];
-export let shipsInTeam = 10;
+export let Ships = new class Ships {
 
+	constructor() {
+		this.shipsInTeam = 10;
+		this.framesPassed = 60;
 
-// Создает корабли
-(function createShips() {
+		this.create();
+	};
 
-	for (let i = 0; i < shipsInTeam; i++) {
-		shipsFullArray.push(new ShipBot("blue"));
-		shipsFullArray[i].spawn();
-	}
+	// Create ships on pageload
+	create() {
 
-	for (let i = shipsInTeam; i < shipsInTeam * 2; i++) {
-		shipsFullArray.push(new ShipBot("red"));
-		shipsFullArray[i].spawn();
-	}
+		for (let i = 0; i < this.shipsInTeam; i++) {
+			shipsFullArray.push(new ShipBot("blue"));
+			shipsFullArray[i].spawn();
+		};
+	
+		for (let i = this.shipsInTeam; i < this.shipsInTeam * 2; i++) {
+			shipsFullArray.push(new ShipBot("red"));
+			shipsFullArray[i].spawn();
+		};
+	
+		shipsFullArray.push(MainShip);
+		shipsFullArray[shipsFullArray.length - 1].spawn();
+	};
 
-	console.log( MainShip )
-	shipsFullArray.push(MainShip);
-	shipsFullArray[shipsFullArray.length - 1].spawn();
+	// Drawing and perform behavior of every ship
+	draw() {
+		for (let i = ships.length-1; i < ships.length; i++) {
+			
+			// Moves, turns, makes shoot, etc.
+			ships[i].behavior();
+	
+			rotate(ships[i].x + 40, ships[i].y + 40, ships[i].rotate + 90);
+			ctx.drawImage(ships[i].image, ships[i].x, ships[i].y, 70, 70);
+	
+			ctx.restore();
+		}
+	};
 
-})()
+	setShipsNearPlayer() {
+		this.framesPassed++;
+	
+		// If second lost
+		if (this.framesPassed >= 60) { 
+			this.framesPassed = 0;
+	
+			ships = [];
 
-
-export function drawShips() {
-
-	for (let i = 0; i < ships.length; i++) {
-		// Двигает, поворачивает, застравляет стрелять и тд
-		ships[i].behavior()
-
-		rotate(ships[i].x + 40, ships[i].y + 40, ships[i].rotate + 90)
-		ctx.drawImage(ships[i].image, ships[i].x, ships[i].y, 70, 70);
-
-		ctx.restore()
-	}
-
-}
-
-
-let framesPassed = 60;
-
-export function setShipsNearPlayer() {
-
-	framesPassed++;
-
-	// Раз в секунду изменяет массив кораблей рядом с игроком
-	if (framesPassed >= 60) { 
-	  framesPassed = 0;
-
-	  ships = [];
- 
-	  shipsFullArray.forEach((ship) => {
-		 if (getDistBetween2dots([MainShip.x, MainShip.y], [ship.x, ship.y]) <= 3000) {
-			ships.push(ship);
-		 };
-	  });
+			shipsFullArray.forEach((ship) => {
+				if (getDistBetween2dots([MainShip.x, MainShip.y], [ship.x, ship.y]) <= 3000) {
+					ships.push(ship);
+				};
+			});
+		};
 
 	};
- 
- 
- };
+
+};

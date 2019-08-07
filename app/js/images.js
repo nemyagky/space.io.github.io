@@ -1,14 +1,10 @@
-// REFACTORED
-
 const diredtory = "/app/imgs/";
 
-
-let createImage = (src) => {
+function createImage(src) {
 	let image = new Image();
 	image.src = diredtory + src;
 	return image;
 }
-
 
 export const images = {
 	ships: {

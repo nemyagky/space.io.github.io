@@ -1,53 +1,55 @@
 import './../sass/main.sass';
 import {ctx, canvas} from './init';
-import {map} from './map'
-import {setKeyboardSettings, setCursorSettings, fps, nextGameStep, setTimeSpent } from './functions';
-import {MainShip} from './ships/MainShip'
-import {drawShips, setShipsNearPlayer} from './ships/ships'
-import {drawShoots} from './shoots'
-import {miniMap} from './minimap'
-import {stars} from './stars'
+import {Map} from './Map';
+import {fps, nextGameStep, setTimeSpent } from './functions';
+import {MainShip} from './ships/MainShip';
+import {Ships} from './ships/Ships';
+import {Shoots} from './Shoots';
+import {MiniMap} from './Minimap';
+import {Stars} from './Stars';
 
-// При загрузке создаем изображения
+
+// Creating images just per page loading
 window.addEventListener("load", gameLoop())
 
 
+
+// Main project function. 60 times per second drawing and changing everything
+// Objects are drawing depending on calling in this function. If we need to draw some object on the top layer - we need to call it earlier
 function gameLoop() {
 	
 	ctx.clearRect(0 , 0, canvas.width, canvas.height);
 
-	// Получаем активные клавиши и информацию о курсоре
-	setKeyboardSettings();
+	// Updates the ships near the player (not all ships are drawn, but only near to the player)
+	Ships.setShipsNearPlayer();
 
-	setCursorSettings();
+	// Drawing stars on the background
+	Stars.draw();
 
-	setShipsNearPlayer();
 
-	//Рисуем звезды на фоне
-	stars.draw();
-
-	// Рисует остальной canvas относительно игрока
+	// Drawing canvas relative to the player
 	ctx.save();
 
-	MainShip.move()
-	ctx.translate(-MainShip.x + canvas.width/2, -MainShip.y + canvas.height/2);
-	
+		ctx.translate(-MainShip.x + canvas.width/2, -MainShip.y + canvas.height/2);
 
-  	map.drawBorder();
-	drawShoots();
-	drawShips();
-	
+		Map.drawBorder();
+		Shoots.draw();
+		Ships.draw();
 
 	ctx.restore();
-	miniMap.draw()
-	
-	// Рисует все статические элементы поверх всего остального
+
+
+
+	// Drawing canvas relative to the creen
+	MiniMap.draw();
 	fps();
 
-	setTimeSpent()
 
-	// Следующий кадр
+	// Converts the speed of objects to speed per second. For optimization
+	setTimeSpent();
+
+
+	// Next frame
 	nextGameStep(gameLoop);
-
 	
-}
+};

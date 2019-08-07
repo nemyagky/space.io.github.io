@@ -1,14 +1,16 @@
 export const canvas = document.querySelector(".canvas");
 export const ctx = canvas.getContext('2d');
 
-canvas.width = document.body.clientWidth;
-canvas.height = document.body.clientHeight;
+
+function stretchCanvas() {
+	canvas.width = document.body.clientWidth;
+	canvas.height = document.body.clientHeight;
+};
+stretchCanvas();
 
 
-window.onresize = function () {
-	// canvas на всю ширину
-	canvas.width = window.innerWidth;
-	canvas.height = window.innerHeight;
-}
+window.addEventListener('resize', () => {
+	stretchCanvas();
+});
 
 export let iterations = 0;
