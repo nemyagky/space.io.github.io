@@ -25,8 +25,8 @@ export let Shoots = new class Shoots {
 			let shoot = shoots[i];
 
 			// Changing x/y denend's on shoot.rotate
-			shoot.x += Math.cos(toRad(shoot.rotate + 90)) * 13;
-			shoot.y += Math.sin(toRad(shoot.rotate + 90)) * 13;
+			shoot.x += Math.cos(toRad(shoot.rotate + 90)) * 30;
+			shoot.y += Math.sin(toRad(shoot.rotate + 90)) * 30;
 
 			// Shoot have time of live. If it didn't spent - draw it. Else - delete it (isShootAlive func will make it itself) and skip iteration
 			if (this.isShootAlive(i)) {
@@ -76,7 +76,7 @@ export let Shoots = new class Shoots {
 	isShootAlive(i) {
 		shoots[i].timeAlive++;
 
-		if (shoots[i].timeAlive > 60) {
+		if (shoots[i].timeAlive > 600000) {
 			delete shoots[i];
 			this.isHoles = true;
 			return false;
@@ -89,19 +89,22 @@ export let Shoots = new class Shoots {
 		// Sorting all the ships
 		// TO FIX -1 - не считая главный корабль
 		for (let j = 0; j < ships.length-1; j++) {
-			// If the center of the shoot is in the ship 
-			if (shoot.x + 20 > ships[j].x &&
-				shoot.x + 5 < ships[j].x + ships[j].w &&
-				shoot.y + 10 > ships[j].y &&
-				shoot.y + 5 < ships[j].y + ships[j].h
-			) {
-				ships[j].x = rand(0, Map.w);
-				ships[j].y = rand(0, Map.h);
 
-				// Deleting the shoot
-				delete shoots[i];
-				this.isHoles = true;
-				break;
+			if (shoots[i].team != ships[j].team) {
+				// If the center of the shoot is in the ship 
+				if (shoot.x + 20 > ships[j].x &&
+					shoot.x + 5 < ships[j].x + ships[j].w &&
+					shoot.y + 10 > ships[j].y &&
+					shoot.y + 5 < ships[j].y + ships[j].h
+				) {
+					ships[j].x = rand(0, Map.w);
+					ships[j].y = rand(0, Map.h);
+						
+					// Deleting the shoot
+					delete shoots[i];
+					this.isHoles = true;
+					break;
+				}
 			}
 		}
 	};

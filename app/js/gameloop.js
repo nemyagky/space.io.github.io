@@ -20,6 +20,7 @@ function gameLoop() {
 	
 	ctx.clearRect(0 , 0, canvas.width, canvas.height);
 
+
 	// Updates the ships near the player (not all ships are drawn, but only near to the player)
 	Ships.setShipsNearPlayer();
 
@@ -29,6 +30,9 @@ function gameLoop() {
 
 	// Drawing canvas relative to the player
 	ctx.save();
+
+		// We need to call MainShip.behavior earlier than ctx.translate, because else ctx.translate cords will be uncorrect
+		MainShip.behavior()
 
 		ctx.translate(-MainShip.x + canvas.width/2, -MainShip.y + canvas.height/2);
 

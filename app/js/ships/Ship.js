@@ -1,18 +1,17 @@
 import {Map} from './../Map';
-import {rand, getDistBetween2dots, setSpeed} from './../functions';
+import {rand, setSpeed} from './../functions';
 import {images} from './../images';
 
-
 export const defaultShip = {
-	w: 20,
-	h: 20,
-	speedUp: 350,
-	speedBrake: 30,
+	w: 70,
+	h: 70,
+	speedUp: 1000,
+	speedBrake: 50,
 	speedX: 0,
 	speedY: 0,
-	maxSpeed: 900,
+	maxSpeed: 300,
 	rotate: 0,
-	fireSpeed: 15
+	fireSpeed: 50
 };
 
 
@@ -38,7 +37,7 @@ export class Ship {
 	}
 
 
-	// obj - ship cords
+	// obj - ship's cords
 	spawn(obj) {
 		if (this.team == "blue") {
 			if (obj) {
@@ -60,8 +59,8 @@ export class Ship {
 			this.y = 100;
 		};
 
-		this.speedX = rand(0, 700);
-		this.speedY = rand(-700, 700);
+		this.speedX = rand(-300, 300);
+		this.speedY = rand(-300, 300);
 	};
 
 
@@ -125,55 +124,5 @@ export class Ship {
 		})();
 	};
 
-
-	// Detects the nearest enemy and rotate in it's direction
-	setTargetForShooting() {
-
-		// Rotate ship to targetForShooting
-		function setRotate() {
-			this.rotate = 180 / Math.PI *
-				Math.atan2(this.targetForShooting.y - this.y, this.targetForShooting.x - this.x);
-		};
-
-		// At start this variable doesn't contains the nearest ship. Passing standart params 
-		let nearestShip = {
-			x: this.x,
-			y: this.y,
-			dist: 99999
-		};
-
-		// Iterate over all enemy ships and set the nearest
-		for (let i = 0; i < ships.length; i++) {
-			//if (this.team != ships[i].team) {
-			// Little by little reduce the dist
-			let dist = getDistBetween2dots( [this.x, this.y], [ships[i].x, ships[i].y] );
-			if (dist < 300 && dist != 0) {
-				// If current ship are near then previous nearestShip - update nearestShip
-				if (dist < nearestShip.dist) {
-					nearestShip.x = ships[i].x;
-					nearestShip.y = ships[i].y;
-					nearestShip.dist = dist;
-				};
-			};
-		};
-
-		// After finding nearestShip - save it as targetForShooting
-		this.targetForShooting = {
-			x: nearestShip.x,
-			y: nearestShip.y
-		};
-
-		setRotate();
-	};
-
-
-	setTeammaterForAttack() {
-	};
-
-	
-	// This function must contain all actions for ship. Calling in Ships.draw()
-	behavior() {
-		this.moving();
-	};
 
 };

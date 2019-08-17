@@ -50,7 +50,7 @@ export let MainShip = new class MainShip extends Ship {
 						y: that.y,
 						team: "blue",
 						rotate: that.rotate - 90,
-						speed: 20,
+						speed: 10,
 						color: "#00FFA9",
 						timeAlive: 0
 					});
